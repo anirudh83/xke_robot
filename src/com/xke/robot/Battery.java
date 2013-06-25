@@ -18,13 +18,16 @@ public class Battery {
 		return remainingChargeInPercent;
 	}
 
-	public boolean isBatteryLessThanLimit(){
-		return remainingChargeInPercent<BATTERY_WARNING_LIMIT;
+	public void setRemainingChargeInPercent(double batteryConsumedInAction) throws NoBatteryException, LowBatteryException {
+		double remainingBattery = remainingChargeInPercent-batteryConsumedInAction;
+		this.remainingChargeInPercent=remainingBattery;
 		
-	}
-
-	public void setRemainingChargeInPercent(double remainingChargeInPercent) {
-		this.remainingChargeInPercent = remainingChargeInPercent;
+		if(remainingBattery<0){
+			this.remainingChargeInPercent=0;
+			throw new NoBatteryException("The battery is exhausted, not enough battery to complete this action");
+		}else if( remainingBattery<BATTERY_WARNING_LIMIT){
+			throw new LowBatteryException("Low Battery");
+		}
 	}
 	
 }
