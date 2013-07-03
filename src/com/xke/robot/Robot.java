@@ -14,12 +14,13 @@ public class Robot {
 	private double carriedWeight;
 	private double distanceTravelledInKm;
 	private StringBuilder robotHead;
+	private String robotDisplay;
 	
 	public Robot(double carriedWeight,double distanceTravelledInKm){
 		
 		this.carriedWeight=carriedWeight;
 		if(isOverWeight()){
-			System.out.println(OVERWEIGHT_WARNING);
+			robotDisplay=OVERWEIGHT_WARNING;
 		}else{
 			this.battery=new Battery();
 			this.distanceTravelledInKm=distanceTravelledInKm;
@@ -31,14 +32,20 @@ public class Robot {
 		return carriedWeight>WEIGHT_LIMIT;
 	}
 	
-	public double calculateRemainingBattery(){
-		double remainingBattery = battery.getRemainingChargeInPercent()-
-				calculateBatteryConsumedByCarryingWeightAndWalk();
-		battery.setRemainingChargeInPercent(remainingBattery);
-		if(battery.isBatteryLessThanLimit()){
-			robotHead=new StringBuilder("Low Battery");
+	public void calculateRemainingBattery(){
+		double consumedBattery = calculateBatteryConsumedByCarryingWeightAndWalk();
+		try {
+			battery.setRemainingChargeInPercent(consumedBattery);
+		} catch (NoBatteryException e) {
+			System.out.println(e.getMessage());
+			robotDisplay="Battery Over";
+		} catch (LowBatteryException e) {
+			robotHead=new StringBuilder(e.getMessage());
 		}
-		return remainingBattery;
+	}
+	
+	public double getRemainingBattery(){
+		return battery.getRemainingChargeInPercent();
 	}
 	
 	
@@ -53,4 +60,9 @@ public class Robot {
 	public String getRobotHead() {
 		return new String(robotHead);
 	}
+
+	public String getRobotDisplay() {
+		return robotDisplay;
+	}
+
 }

@@ -17,7 +17,8 @@ public class RobotTest {
 	@Test
 	public void testWithWeight0KgAndTravel3_5Test() {
 		robot = new Robot(0,3.5);
-		Assert.assertEquals(30.0, robot.calculateRemainingBattery(),0);
+		robot.calculateRemainingBattery();
+		Assert.assertEquals(30.0,robot.getRemainingBattery() ,0);
 	}
 
 	/**
@@ -27,7 +28,8 @@ public class RobotTest {
 	 @Test
 	  public void testwith3KgAnd2Km(){
 		 robot = new Robot(3, 2);
-		 Assert.assertEquals(54.0, robot.calculateRemainingBattery(),0);
+		 robot.calculateRemainingBattery();
+		 Assert.assertEquals(54.0, robot.getRemainingBattery(),0);
 	 }
 	 
 	 /**
@@ -36,6 +38,7 @@ public class RobotTest {
 	 @Test
 	 public void testOVerLoadWt12Kg(){
 		 robot = new Robot(12, 0);
+		 Assert.assertEquals("Overweight",robot.getRobotDisplay());
 		 
 	 }
 	 
@@ -44,8 +47,15 @@ public class RobotTest {
 	  */
 	 @Test
 	 public void testRobotHead(){
-		 robot = new Robot(6,8);
+		 robot = new Robot(6,4);
 		 robot.calculateRemainingBattery();
 		 Assert.assertEquals("Low Battery",robot.getRobotHead());
+	 }
+	 
+	 @Test
+	 public void testAllBatteryConsumed(){
+		 robot = new Robot(6,5);
+		 robot.calculateRemainingBattery();
+		 Assert.assertEquals("Battery Over",robot.getRobotDisplay());
 	 }
 }
